@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>Receptive Demo</title>
+	<script src="lib/_.js"></script>
+	<script src="lib/jquery.js"></script>
+	<script src="src/receptive.js"></script>
+</head>
+<body>
+	<script id="introTemplate" type="tmpl">
+		<h1>Hi <%=name%> (:<%=balance%>)</h1>
+		<h2>Your balance is: <%=String(balance).split('').join(',')%></h2>
+		<input/>
+	</script>
+
+	<script>
+
+		var introEl = receptive.fromTemplate(
+			$('#introTemplate').html(),
+			{
+				name: 'James',
+				balance: 2342
+			},
+			{
+				balance: 'h1,h2'
+			}
+		);
+
+		introEl.$el.appendTo('body');
+
+		introEl.$el.find('input').on('keyup', function() {
+			introEl.set('balance', this.value)
+		});
+
+	</script>
+</body>
+</html>
