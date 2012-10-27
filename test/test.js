@@ -31,6 +31,28 @@ test('Default binding: *', function() {
   notEqual(div, r.$el.find('div')[0]);
 });
 
+test('Bindings -- singular selectors', function() {
+  var r = receptive.fromTemplate(
+    '<div><%=x%> and <%=foo%></div><span><%=y%> and <%=foo%></span>',
+    {x: 13, y: 14, foo: 'thing123'},
+    {foo: 'div,span', x: 'div'}
+  );
+  var div = r.$el.find('div')[0];
+  var span = r.$el.find('span')[0];
+
+  r.set({x: 99});
+  // Only DIV should be different:
+  equal(span, r.$el.find('span')[0]); 
+  notEqual(div, r.$el.find('div')[0]); 
+
+  r.set({foo: 88});
+  // Both should have been updated:
+  notEqual(span, r.$el.find('span')[0]); 
+  notEqual(div, r.$el.find('div')[0]); 
+
+  htmlEqual(r.$el.html(), '<div>99 and 88</div><span>14 and 88</span>');
+});
+
 module('Misc templates');
 
 test('Renders a no-logic template', function() {
